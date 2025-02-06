@@ -1,14 +1,12 @@
-# Stage 1: Build the Angular app
-FROM node:18 as build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . .
-RUN npm run build -- --configuration production
-
-# Stage 2: Serve the app using Nginx
+# Use lightweight Nginx as the base image
 FROM nginx:alpine
-COPY --from=build /app/dist/angular-portfolio-app /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+
+# Copy prebuilt Angular files from local dist/browser/ to Nginx HTML directory
+COPY dist/angular-portfolio-app/browser /usr/share/nginx/html
+
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80 443
+
 CMD ["nginx", "-g", "daemon off;"]
