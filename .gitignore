@@ -6,7 +6,6 @@ Thumbs.db
 /node_modules
 
 # Ignore Angular build artifacts
-/dist
 /.angular/cache
 
 # Ignore IDE/Editor specific files

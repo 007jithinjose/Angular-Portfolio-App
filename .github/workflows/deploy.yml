@@ -1,0 +1,51 @@
+name: Deploy Angular App to EC2
+
+on:
+  push:
+    branches:
+      - main  # Change to your deployment branch if needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Angular App
+      run: npm run build --prod
+
+    - name: Copy Files to EC2
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+        scp -o StrictHostKeyChecking=no -i private_key -r dist/ $EC2_USER@$EC2_HOST:/home/$EC2_USER/angular-dist
+        rm -f private_key
+
+    - name: Restart Docker Container on EC2
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i private_key $EC2_USER@$EC2_HOST << 'EOF'
+          cd /home/$EC2_USER/Angular-Portfolio-App
+          docker stop angular-portfolio || true
+          docker rm angular-portfolio || true
+          docker build -t angular-portfolio .
+          docker run -d -p 80:80 -p 443:443 --name angular-portfolio -v /etc/letsencrypt:/etc/letsencrypt:ro angular-portfolio
+        EOF
+        rm -f private_key
