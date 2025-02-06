@@ -69,11 +69,11 @@ temp
 .env.local
 .env.*.local
 
-# Ignore compiled CSS and SCSS files
-*.css
-*.css.map
-*.scss
-*.scss.map
+
+# Ignore compiled global CSS but keep component styles
+!src/**/*.css
+!src/**/*.scss
+
 
 # Ignore TypeScript output
 *.tsbuildinfo

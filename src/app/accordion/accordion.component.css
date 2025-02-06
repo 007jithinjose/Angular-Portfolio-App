@@ -1,0 +1,105 @@
+.accordion-left {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.accordion-text {
+  font-size: 1rem;
+}
+
+.tech-board {
+  display: grid;
+  max-width: 820px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 10px;
+  background-color: #141a20;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.tech-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #27333f;
+  border: 2px solid #00FF00;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+  aspect-ratio: 1; /* Ensures the cells are square */
+}
+
+.tech-cell i {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.tech-name {
+  font-size: 0.9rem;
+  color: #00FF00;
+  margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tech-board {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for tablets */
+    padding: 15px;
+  }
+
+  .tech-cell {
+    padding: 8px;
+    margin: 5px;
+  }
+
+  .tech-cell i {
+    font-size: 2rem;
+  }
+
+  .tech-name {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tech-board {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+    padding: 10px;
+  }
+
+  .tech-cell {
+    padding: 5px;
+    margin: 5px;
+  }
+
+  .tech-cell i {
+    font-size: 1.5rem;
+  }
+
+  .tech-name {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .tech-board {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for very small devices */
+    padding: 5px;
+  }
+
+  .tech-cell {
+    padding: 4px;
+    margin: 4px;
+  }
+
+  .tech-cell i {
+    font-size: 1.2rem;
+  }
+
+  .tech-name {
+    font-size: 0.6rem;
+  }
+}
