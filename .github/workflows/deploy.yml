@@ -31,7 +31,8 @@ jobs:
         EC2_USER: ${{ secrets.EC2_USER }}
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-        scp -o StrictHostKeyChecking=no -i private_key -r dist/ $EC2_USER@$EC2_HOST:/home/$EC2_USER/angular-dist
+        ssh -o StrictHostKeyChecking=no -i private_key $EC2_USER@$EC2_HOST "mkdir -p /home/$EC2_USER/PersonalProjects/Angular-Portfolio-App"
+        scp -o StrictHostKeyChecking=no -i private_key -r dist/ Dockerfile $EC2_USER@$EC2_HOST:/home/$EC2_USER/PersonalProjects/Angular-Portfolio-App
         rm -f private_key
 
     - name: Restart Docker Container on EC2
@@ -42,7 +43,7 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key $EC2_USER@$EC2_HOST << 'EOF'
-          cd /home/$EC2_USER/Angular-Portfolio-App
+          cd /home/$EC2_USER/PersonalProjects/Angular-Portfolio-App
           docker stop angular-portfolio || true
           docker rm angular-portfolio || true
           docker build -t angular-portfolio .
